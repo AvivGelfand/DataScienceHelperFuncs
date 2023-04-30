@@ -7,6 +7,13 @@ from scipy.stats import f_oneway  # for ANOVA
 from sklearn.feature_selection import chi2  # for chi2
 from sklearn.preprocessing import StandardScaler
 
+def find_high_correlations(df, threshold):
+    corr_mat = df.corr().unstack().sort_values(kind="quicksort").drop_duplicates()
+    high_corr = corr_mat[corr_mat >= threshold].reset_index()
+    high_corr.columns = ["feature_1", "feature_2", "correlation"]
+    high_corr = high_corr[high_corr["feature_1"] != high_corr["feature_2"]]
+    return list(high_corr[["feature_1", "feature_2"]].to_records(index=False))
+
 
 def show_distribution(df, col):
     # creating two subplots:
@@ -135,7 +142,7 @@ def chi2_feature_selection(df, target, alpha=0.05):
         if p_value > alpha:
             redundant_cols.append(col)
     print(f"Chi-Squared test of independence regarding \n{target}:")
-    df_chisq.sort_values("p-value")
+    return df_chisq.sort_values("p-value")
 
 
 def show_hist(col, title=None):

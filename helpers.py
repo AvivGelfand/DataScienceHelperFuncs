@@ -66,7 +66,7 @@ def show_distribution(df, col):
     fig.suptitle(col, fontsize=20, fontweight="bold")
 
 
-def show_distributions(df, col):
+def show_distributions(df):
     continuous_features = df.select_dtypes(include="number").columns
     # create the plot for each columns
     for col in continuous_features:

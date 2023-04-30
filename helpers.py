@@ -7,6 +7,7 @@ from scipy.stats import f_oneway  # for ANOVA
 from sklearn.feature_selection import chi2  # for chi2
 from sklearn.preprocessing import StandardScaler
 
+
 def find_high_correlations(df, threshold):
     corr_mat = df.corr().unstack().sort_values(kind="quicksort").drop_duplicates()
     high_corr = corr_mat[corr_mat >= threshold].reset_index()
@@ -111,7 +112,7 @@ def anova_feature_selection(df, target, alpha=0.05):
 
     for col in numeric_columns:
         # Calculate F-statistic and p-value using calc_anova function
-        F, p_value = calc_anova(df, df[target], col)
+        F, p_value = calc_anova(df, target, col)
 
         # Store ANOVA results in the df_anova dataframe
         df_anova.loc[col, :] = [

@@ -6,7 +6,35 @@ import seaborn as sns
 from scipy.stats import f_oneway  # for ANOVA
 from sklearn.feature_selection import chi2  # for chi2
 from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
 
+
+def elbow_method(iters_num, data_set, k):
+    from sklearn.cluster import KMeans
+    iters_num = 10
+    clustering_scores = []
+    for i in range(1, iters_num):  # range of numbers for clusters
+        # print('cluster numbers:', i)
+        kmeans = KMeans(  # This is where we create our model
+            n_clusters=i,  # number of clusters
+            init="random",  # default value is 'K-means++'
+            random_state=42,
+        )
+        kmeans.fit(data_set)  # Training the model
+        # print('cluster\'s Interia score: ', kmeans.inertia_)
+        clustering_scores.append(
+            kmeans.inertia_
+        )  # inertia_ = Sum of squared distances of samples to their closest cluster center.
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, iters_num), clustering_scores, marker=".")
+    plt.scatter(
+        k, clustering_scores[k - 1], s=300, c="red", marker="*"
+    )  # and now you know how to add a star to a plot :)
+    plt.title("The Elbow Method")
+    plt.xlabel("No. of Clusters")
+    plt.ylabel("Clustering Score (Inertia)")
+    plt.show()
 
 def find_high_correlations(df, threshold):
     corr_mat = df.corr().unstack().sort_values(kind="quicksort").drop_duplicates()

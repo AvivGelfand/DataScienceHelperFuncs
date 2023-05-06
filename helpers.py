@@ -17,7 +17,6 @@ def elbow_method(iters_num, data_set, k):
         # print('cluster numbers:', i)
         kmeans = KMeans(  # This is where we create our model
             n_clusters=i,  # number of clusters
-            init="random",  # default value is 'K-means++'
             random_state=42,
         )
         kmeans.fit(data_set)  # Training the model

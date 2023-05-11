@@ -9,6 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
 
+
 def elbow_method(iters_num, data_set, k):
     from sklearn.cluster import KMeans
     iters_num = 10
@@ -41,6 +42,39 @@ def find_high_correlations(df, threshold):
     high_corr.columns = ["feature_1", "feature_2", "correlation"]
     high_corr = high_corr[high_corr["feature_1"] != high_corr["feature_2"]]
     return list(high_corr[["feature_1", "feature_2"]].to_records(index=False))
+
+def viz3D(clusters):
+    import plotly as py  # import plotly library
+    import plotly.graph_objs as go  # import graph objects as go
+
+    trace1 = go.Scatter3d(  # create trace for scatterplot
+        x=df["daily_ammount_sold"],  # x-axis will be Age column
+        y=df["shippment_duration"],  # y-axis will be Spending Score
+        z=df["price"],  # z-axis will be Annual Income
+        mode="markers",
+        marker=dict(
+            color=z_kmeans,
+            size=10,
+            line=dict(color=z_kmeans, width=12),  # color points by clusters
+            opacity=0.8,
+        ),
+    )
+
+    data = [trace1]  # create data list with trace1
+
+    layout = go.Layout(  # create layout for scatterplot
+        title="Clusters by daily_ammount_sold, shippment_duration, and price",  # Set Graph Title
+        scene=dict(
+            xaxis=dict(title="daily_ammount_sold"),
+            yaxis=dict(title="shippment_duration"),
+            zaxis=dict(title="price"),
+        ),  # Axis titles
+    )
+    # create a figure with data and layout that we just defined
+    fig = go.Figure(data=data, layout=layout)
+
+    # plot the figure using plotly's offline mode
+    return py.offline.iplot(fig);
 
 
 def show_distribution(df, col):

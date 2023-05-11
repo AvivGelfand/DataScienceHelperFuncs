@@ -74,7 +74,7 @@ def viz3D(clusters):
     fig = go.Figure(data=data, layout=layout)
 
     # plot the figure using plotly's offline mode
-    return py.offline.iplot(fig);
+    py.offline.iplot(fig);
 
 
 def show_distribution(df, col):

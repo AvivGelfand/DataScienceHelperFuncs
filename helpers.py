@@ -27,7 +27,7 @@ def elbow_method(iters_num, data_set, k):
             kmeans.inertia_
         )  # inertia_ = Sum of squared distances of samples to their closest cluster center.
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(8, 5))
     plt.plot(range(1, iters_num), clustering_scores, marker=".")
     plt.scatter(
         k, clustering_scores[k - 1], s=300, c="red", marker="*"

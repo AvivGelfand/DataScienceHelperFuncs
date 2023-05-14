@@ -9,16 +9,16 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
 
-
 def elbow_method(iters_num, data_set, k):
     from sklearn.cluster import KMeans
+
     iters_num = 10
     clustering_scores = []
     for i in range(1, iters_num):  # range of numbers for clusters
         # print('cluster numbers:', i)
         kmeans = KMeans(  # This is where we create our model
             n_clusters=i,  # number of clusters
-            n_init = 'auto',
+            n_init="auto",
             random_state=42,
         )
         kmeans.fit(data_set)  # Training the model
@@ -27,7 +27,7 @@ def elbow_method(iters_num, data_set, k):
             kmeans.inertia_
         )  # inertia_ = Sum of squared distances of samples to their closest cluster center.
 
-    plt.figure(figsize=(8, 5))
+    plt.figure(figsize=(7, 4))
     plt.plot(range(1, iters_num), clustering_scores, marker=".")
     plt.scatter(
         k, clustering_scores[k - 1], s=300, c="red", marker="*"
@@ -37,12 +37,14 @@ def elbow_method(iters_num, data_set, k):
     plt.ylabel("Clustering Score (Inertia)")
     plt.show()
 
+
 def find_high_correlations(df, threshold):
     corr_mat = df.corr().unstack().sort_values(kind="quicksort").drop_duplicates()
     high_corr = corr_mat[corr_mat >= threshold].reset_index()
     high_corr.columns = ["feature_1", "feature_2", "correlation"]
     high_corr = high_corr[high_corr["feature_1"] != high_corr["feature_2"]]
     return list(high_corr[["feature_1", "feature_2"]].to_records(index=False))
+
 
 def viz3D(clusters):
     import plotly as py  # import plotly library
@@ -75,7 +77,7 @@ def viz3D(clusters):
     fig = go.Figure(data=data, layout=layout)
 
     # plot the figure using plotly's offline mode
-    py.offline.iplot(fig);
+    py.offline.iplot(fig)
 
 
 def show_distribution(df, col):

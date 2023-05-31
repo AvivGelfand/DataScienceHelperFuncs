@@ -217,7 +217,7 @@ def chi2_feature_selection(df, target, alpha=0.05):
         if p_value > alpha:
             redundant_cols.append(col)
     print(f"Chi-Squared test of independence regarding \n{target}:")
-    return df_chisq.sort_values("p-value")
+    return df_chisq.sort_values("p-value"), redundant_cols
 
 
 def show_hist(col, title=None):

@@ -37,6 +37,16 @@ def elbow_method(iters_num, data_set, k):
     plt.ylabel("Clustering Score (Inertia)")
     plt.show()
 
+def calc_corr(df, target):
+    res = pd.DataFrame()
+    features = list(df.select_dtypes(include="number").columns)
+    features.remove(target)
+
+    for feature in features:
+        corr = stats.pearsonr(df[target], df[feature])
+        data = pd.DataFrame({f"Correlation with `{str(target).capitalize()}`": round(corr[0], 4),"p-value": round(corr[1], 4),},index=[feature],)
+        res = pd.concat([res, data])
+    return res.sort_values(f"Correlation with `{str(target).capitalize()}`", ascending=False)
 
 def find_high_correlations(df, threshold):
     corr_mat = df.corr().unstack().sort_values(kind="quicksort").drop_duplicates()

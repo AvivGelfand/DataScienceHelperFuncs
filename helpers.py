@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 from scipy import stats
+from scipy.stats import f_oneway  # for ANOVA
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import f_oneway  # for ANOVA
 from sklearn.feature_selection import chi2  # for chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans

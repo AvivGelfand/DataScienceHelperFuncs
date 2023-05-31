@@ -40,7 +40,7 @@ def elbow_method(iters_num, data_set, k):
 
 def find_high_correlations(df, threshold):
     corr_mat = df.corr().unstack().sort_values(kind="quicksort").drop_duplicates()
-    high_corr = corr_mat[corr_mat >= threshold].reset_index()
+    high_corr = corr_mat[abs(corr_mat) >= threshold].reset_index()
     high_corr.columns = ["feature_1", "feature_2", "correlation"]
     high_corr = high_corr[high_corr["feature_1"] != high_corr["feature_2"]]
     return list(high_corr[["feature_1", "feature_2"]].to_records(index=False))

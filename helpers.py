@@ -88,7 +88,20 @@ def viz3D(clusters):
 
     # plot the figure using plotly's offline mode
     py.offline.iplot(fig)
-
+    
+def sorted_count_plot(df, col):
+    ax = sns.countplot(x=col, data=df, order=df[col].value_counts().index);
+    plt.title(f"{col} Counts");
+    for p in ax.patches:
+        if p.get_height() > 1000:
+            ax.annotate(f"\n{round(p.get_height()/1000,1)}K",(p.get_x() , p.get_height() + 1),size=9);
+        else:
+            ax.annotate(f"\n{p.get_height()}",(p.get_x() + 0.01, p.get_height() + 1),size=9);
+    # if there are more than 10 categories, rotate the labels:
+    if len(df[col].unique()) > 10:
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=90);
+    
+    plt.show();
 
 def show_distribution(df, col):
     # creating two subplots:

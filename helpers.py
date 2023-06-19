@@ -295,7 +295,8 @@ def get_numeric_details(df):
             },
             index=[column],
         )
-        res = res.append(data)
+        res = pd.concat([res, data])
+        # res = res.append(data)
     return res
 
 

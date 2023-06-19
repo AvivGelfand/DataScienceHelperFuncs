@@ -1,0 +1,47 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore virtual environment directory
+venv/
+.env/
+.env
+.vscode/
+env/
+
+
+# Ignore log files
+*.log
+
+# Ignore local database files
+db.sqlite3
+.csv
+/.csv
+/*.csv
+/*.xlsx
+
+
+*.exe
+*.out
+*.dll
+
+node_modules/
+vendor/
+
+.vscode/
+.idea/
+.DS_Store
+
+*.tmp
+*.cache
+
+*.log
+
+
+config.ini
+secrets.yaml
+
+build/
+dist/
+
+.env
+secrets.json

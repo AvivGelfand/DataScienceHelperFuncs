@@ -8,6 +8,43 @@ from sklearn.feature_selection import chi2  # for chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
+def kde_target_plot( df, target, n_rows=5, n_cols=4):
+    
+    """
+    Plots the distribution of a feature colored by the value of the target.
+    This function is used to visualize the relationship between a feature and the target.
+    
+    """
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # get a list of all feature column names
+    feature_cols = list(df.select_dtypes(include="number").columns)
+    feature_cols.remove(target)
+
+    # set the number of rows and columns for the subplots of 20 features:
+    n_rows = n_rows
+    n_cols = n_cols
+
+    # create a figure with subplots
+    fig, axs = plt.subplots(n_rows, n_cols, figsize=(16, 10))
+
+    # flatten the subplots array for easier indexing
+    axs = axs.flatten()
+
+    # loop over the feature columns and create a KDE plot for each one
+    for i, col in enumerate(feature_cols):
+        sns.kdeplot(data=df, x=col, hue=target, ax=axs[i])
+        axs[i].set_title(f'Feature {col}', fontsize=14)
+        axs[i].set_xlabel('')
+        axs[i].set_ylabel('Density', fontsize=12)
+
+    # remove any unused subplots
+    for i in range(len(feature_cols), n_rows * n_cols):
+        fig.delaxes(axs[i])
+
+    plt.tight_layout()
+    plt.show()
 
 def elbow_method(iters_num, data_set, k):
     from sklearn.cluster import KMeans

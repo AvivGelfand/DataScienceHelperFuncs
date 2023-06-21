@@ -140,62 +140,57 @@ def sorted_count_plot(df, col):
     
     plt.show();
 
+# function to show the distribution of a column
 def show_distribution(df, col):
     # creating two subplots:
-    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
-    textb = (
-        "Quantiles:"
-        + "\n\n"
-        + " 25%: "
-        + str(round(df[col].quantile(0.25), 2))
-        + "\n"
-        + " 50%: "
-        + str(round(df[col].quantile(0.50), 2))
-        + "\n"
-        + " 75%: "
-        + str(round(df[col].quantile(0.75), 2))
-    )
+    fig, axes = plt.subplots(nrows=2, ncols=1, #figsize=(10, 5)
+                             sharex=True, gridspec_kw={"height_ratios": (0.7, 0.3) , "hspace": 0.5,"top":0.85})
+                                #set space between subplot and title
+                             # set pedding between subplots
+                                                       #, "left":0.5
 
-    plt.text(0.8, 0.65, textb, fontsize=12, transform=plt.gcf().transFigure)
-    # prepare text:
-    text = (
-        "Stats:"
-        + "\n\n"
-        + "Mean: "
-        + str(round(df[col].mean(), 2))
-        + "\n"
-        + "Median: "
-        + str(round(df[col].median(), 2))
-        + "\n"
-        + "Std dev: "
-        + str(round(df[col].std(), 2))
-        + "\n"
-        "Mode: "
-        + str((df[col].mode().values)[0])
-        + "\n"
-        + "Skew: "
-        + str(round(df[col].skew(), 2))
-        + "\n"
-    )
-    plt.text(0.35, 0.55, text, fontsize=12, transform=plt.gcf().transFigure)
+    textb = ("Quantiles:"+ "\n\n"+ " 25%: "+ str(round(df[col].quantile(0.25), 2))+ "\n" + " 50%: " +
+              str(round(df[col].quantile(0.50), 2)) + "\n"+ " 75%: "+ str(round(df[col].quantile(0.75), 2)))
+    # plt.text(0.8, 1, textb, fontsize=12, transform=plt.gcf().transFigure)
+#   ax1.text(0.75, 0.95, text, transform=ax1.transAxes, fontsize=10,
+        #    verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+    text = ( "Stats:"+ "\n\n"+ "Mean: "+ str(round(df[col].mean(), 2)) + "\n" + "Stdev: "+ str(round(df[col].std(), 2))+"\n"+ "Median: "+ str(round(df[col].median(), 2)) + "\n" + "Mode: "+ str(round((df[col].mode().values)[0],2)) + "\n"+ "Skew: " + str(round(df[col].skew(), 2)) ) + "\n"+ "Kurtosis: " + str(round(df[col].kurtosis(), 2)) +"\n\n\n" 
+    #+("Quantiles:"+ "\n\n"+ " 25%: "+ str(round(df[col].quantile(0.25), 2))+ "\n" + " 50%: " +
+    #          str(round(df[col].quantile(0.50), 2)) + "\n"+ " 75%: "+ str(round(df[col].quantile(0.75), 2)))
+    
+    plt.text(0.93, 0.45, text, fontsize=9, transform=plt.gcf().transFigure,
+              bbox=dict(boxstyle='round', facecolor='white', alpha=0.8) )
+
+
+    plt.text(0.93, 0.12, textb, fontsize=9, transform=plt.gcf().transFigure,bbox=dict(boxstyle='round', facecolor='white', alpha=0.8) )
+
     plt.axvline(df[col].mean(), color="k", linestyle="dashed", linewidth=1)
     plt.axvline(df[col].median(), color="red", linestyle="dashed", linewidth=1)
+    
+
     # histplot:
     sns.histplot(x=df[col], ax=axes[0]).set(title="Histogram")
     axes[0].axvline(df[col].mean(), color="k", linestyle="dashed", linewidth=2)
     axes[0].axvline(df[col].median(), color="red", linestyle="dashed", linewidth=2)
 
+    # legend:
+    plt.legend({"Mean":df[col].mean(), "Median":df[col].median()}, # location outside plot
+               loc = "upper right", 
+               # set marker width
+                handlelength=2,
+                # set marker height
+                # handleheight=1,
+               bbox_to_anchor=(1.24,1.8),fontsize=9, frameon=False
+               )
+    
+
+    
     # boxplot:
-    sns.boxplot(
-        ax=axes[1],
-        x=df[col],
-        showmeans=True,
-        meanline=True,
-        meanprops={"color": "white"},
-        boxprops={"linewidth": 2},
-    ).set(title="Box Plot")
+    sns.boxplot(ax=axes[1],x=df[col],showmeans=True,meanline=True,  meanprops={"color": "black"},boxprops={"linewidth": 1}).set(title="Box Plot")
+    
     # main title:
-    fig.suptitle(col, fontsize=20, fontweight="bold")
+    fig.suptitle(f"Distribution of {str(col).capitalize()}", fontsize=12,fontweight="bold");
+    # end of function
 
 
 def show_distributions(df):
@@ -350,31 +345,15 @@ def get_numeric_details(df):
     return res
 
 
-def cat_count(df, column):
-    g1 = (
-        df.groupby(column)
-        .agg(
-            num_of_observations=(column, "size"),
-            pct=(column, lambda x: x.count() / len(df)),
-        )
-        .sort_values("pct", ascending=False)
-    )
+# def cat_count(df, column):
+#     g1 = (df.groupby(column).agg(num_of_observations=(column, "size"),pct=(column, lambda x: x.count() / len(df)), 
+#                                  ).("pct", ascending=False))
 
-    g2 = (
-        df.agg(
-            num_of_observations=(column, "size"),
-            pct=(column, lambda x: x.count() / len(df)),
-        )
-        .transpose()
-        .rename(index={column: "Total"})
-    )
+#     g2 = (df.agg(num_of_observations=(column, "size"),pct=(column, lambda x: x.count() / len(df)),
+#                  ).transpose().rename(index={column: "Total"}))
 
-    res = pd.concat([g1, g2])
-
-    res.reset_index(inplace=True)
-    res.rename(columns={"index": column}, inplace=True)
-
-    res = res.assign(
-        num_of_observations=res["num_of_observations"].astype(int)
-    ).style.format({"pct": "{:.2%}"})
-    return res
+#     res = pd.concat([g1, g2])
+#     res.reset_index(inplace=True)
+#     res.rename(columns={"index": column}, inplace=True)
+#     res = res.assign(num_of_observations=res["num_of_observations"].astype(int)).style.format({"pct": "{:.2%}"})
+#     return res

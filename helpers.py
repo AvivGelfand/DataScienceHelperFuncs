@@ -73,7 +73,9 @@ def check_outliers(data):
     upper_bound = q3 + (1.5 * iqr)
     print("Check for outliers using IQR method:")
     print(f"Lower bound: {lower_bound}, Upper bound: {upper_bound}")
-    print(np.any((data < lower_bound) | (data > upper_bound)))
+    print("Any outlires: ",np.any((data < lower_bound) | (data > upper_bound)))
+    # print how many outliers
+    print("Number of outliers: ",len(data[(data < lower_bound) | (data > upper_bound)]))
     return np.any((data < lower_bound) | (data > upper_bound))
 
 def recommend_correlation_method(data1, data2):

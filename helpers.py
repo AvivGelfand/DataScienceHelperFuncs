@@ -48,6 +48,59 @@ def calculate_correlations(data1, data2):
 
     return results
 
+    
+import numpy as np
+import scipy.stats as stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def check_normality(data):
+    """Perform Shapiro-Wilk test for normality."""
+    stat, p = stats.shapiro(data)
+    alpha = 0.05
+    if p > alpha:
+        return True  # Data looks normal
+    else:
+        return False  # Data does not look normal
+
+def check_outliers(data):
+    """Check for outliers using IQR method."""
+    q1, q3 = np.percentile(data, [25, 75])
+    iqr = q3 - q1
+    lower_bound = q1 - (1.5 * iqr)
+    upper_bound = q3 + (1.5 * iqr)
+    return np.any((data < lower_bound) | (data > upper_bound))
+
+def recommend_correlation_method(data1, data2):
+    """Recommend a correlation method based on data characteristics."""
+    if check_normality(data1) and check_normality(data2) and not (check_outliers(data1) or check_outliers(data2)):
+        return "Pearson"
+    else:
+        return "Spearman or Kendall"
+    
+
+def select_correlation_method(data1, data2):
+    """
+    Select the most appropriate correlation method (Spearman or Kendall)
+    based on the characteristics of the data.
+
+    Parameters:
+    data1, data2 (array-like): Input data series.
+
+    Returns:
+    str: Recommended correlation method.
+    """
+
+    sample_size = len(data1)
+    contains_outliers = check_outliers(data1) or check_outliers(data2)
+    contains_ties = len(set(data1)) < len(data1) or len(set(data2)) < len(data2)
+
+    if sample_size < 30 or contains_outliers:
+        return "Kendall"
+    elif contains_ties:
+        return "Spearman"
+    else:
+        return "Spearman or Kendall"
 
 def kde_target_plot( df, target, n_rows=5, n_cols=4):
     

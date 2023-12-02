@@ -76,6 +76,7 @@ def check_outliers(data):
     print("Any outlires: ",np.any((data < lower_bound) | (data > upper_bound)))
     # print how many outliers
     print("Number of outliers: ",len(data[(data < lower_bound) | (data > upper_bound)]))
+    print("proportion of outliers: ",len(data[(data < lower_bound) | (data > upper_bound)])/len(data))
     return np.any((data < lower_bound) | (data > upper_bound))
 
 def recommend_correlation_method(data1, data2):

@@ -7,6 +7,47 @@ import seaborn as sns
 from sklearn.feature_selection import chi2  # for chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
+import numpy as np
+import scipy.stats as stats
+
+def calculate_correlations(data1, data2):
+    """
+    Calculate Pearson, Spearman, and Kendall correlations for two data series.
+
+    Parameters:
+    data1 (array-like): The first data series.
+    data2 (array-like): The second data series.
+
+    Returns:
+    dict: A dictionary containing correlation coefficients and p-values for each method.
+    # # Example usage
+    # np.random.seed(0)  # For reproducibility
+    # data1 = np.random.randn(100)
+    # data2 = np.random.randn(100)
+
+    # correlation_results = calculate_correlations(data1, data2)
+    # for method, values in correlation_results.items():
+    #     print(f"{method} correlation coefficient: {values['Correlation Coefficient']}, P-value: {values['P-value']}")
+    """
+
+    # Calculating Pearson correlation
+    pearson_corr, pearson_pval = stats.pearsonr(data1, data2)
+
+    # Calculating Spearman correlation
+    spearman_corr, spearman_pval = stats.spearmanr(data1, data2)
+
+    # Calculating Kendall correlation
+    kendall_corr, kendall_pval = stats.kendalltau(data1, data2)
+
+    # Compiling results
+    results = {
+        "Pearson": {"Correlation Coefficient": pearson_corr, "P-value": pearson_pval},
+        "Spearman": {"Correlation Coefficient": spearman_corr, "P-value": spearman_pval},
+        "Kendall": {"Correlation Coefficient": kendall_corr, "P-value": kendall_pval}
+    }
+
+    return results
+
 
 def kde_target_plot( df, target, n_rows=5, n_cols=4):
     

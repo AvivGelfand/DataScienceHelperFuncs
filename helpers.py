@@ -58,6 +58,8 @@ def check_normality(data):
     """Perform Shapiro-Wilk test for normality."""
     stat, p = stats.shapiro(data)
     alpha = 0.05
+    print("Perform Shapiro-Wilk test for normality:")
+    print(f"Statistics={stat}, p={p}")
     if p > alpha:
         return True  # Data looks normal
     else:
@@ -69,6 +71,9 @@ def check_outliers(data):
     iqr = q3 - q1
     lower_bound = q1 - (1.5 * iqr)
     upper_bound = q3 + (1.5 * iqr)
+    print("Check for outliers using IQR method:")
+    print(f"Lower bound: {lower_bound}, Upper bound: {upper_bound}")
+    print(np.any((data < lower_bound) | (data > upper_bound)))
     return np.any((data < lower_bound) | (data > upper_bound))
 
 def recommend_correlation_method(data1, data2):
